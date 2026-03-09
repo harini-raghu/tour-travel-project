@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ----------------------------------------------------------
+   Fade Up (General animation used in multiple components)
+---------------------------------------------------------- */
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----------------------------------------------------------
+   Wave Wiggle for SVG
+---------------------------------------------------------- */
+@layer utilities {
+  @keyframes waveWiggle {
+    0% { d: path("M0,256 C360,300 1080,150 1440,240 V320 H0 Z"); }
+    50% { d: path("M0,240 C360,280 1080,180 1440,220 V320 H0 Z"); }
+    100% { d: path("M0,256 C360,300 1080,150 1440,240 V320 H0 Z"); }
+  }
+
+  .wave-wiggle path {
+    animation: waveWiggle 5s ease-in-out infinite;
+  }
+}
+
+/* ----------------------------------------------------------
+   Hero Text Fade
+---------------------------------------------------------- */
+@keyframes heroFade {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.hero-text-animate {
+  animation: heroFade 1.2s ease-out;
+}
+
+/* ----------------------------------------------------------
+   Services Scroll Animation
+---------------------------------------------------------- */
+@keyframes fadeSlideUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-service {
+  animation: fadeSlideUp 0.8s ease-out forwards;
+}
+
+/* ----------------------------------------------------------
+   🌈 Rainbow Glow Border on Hover
+---------------------------------------------------------- */
+.card-glow {
+  position: relative;
+  border-radius: 1rem;
+  overflow: visible;
+}
+
+.card-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;                /* border thickness */
+  border-radius: inherit;
+  background: linear-gradient(
+    45deg,
+    #ff7ae5,
+    #7ab8ff,
+    #b7ff8c,
+    #ffe08c,
+    #ff7ae5
+  );
+  background-size: 400% 400%;
+  
+  opacity: 0;
+  transition: opacity .4s ease, filter .4s ease, transform .4s ease;
+  z-index: -1;                 /* stays BEHIND the card */
+  filter: blur(10px);          /* soft halo */
+}
+
+.card-glow:hover::before {
+  opacity: 1;
+  transform: scale(1.03);
+  animation: glowMove 3s linear infinite;
+}
+
+@keyframes glowMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+/* ----------------------------------------------------------
+   Smooth Fade Reveal for Hover Text
+---------------------------------------------------------- */
+.fade-delay-1 { animation: fadeUp 0.4s forwards; }
+.fade-delay-2 { animation: fadeUp 0.6s forwards; }
+.fade-delay-3 { animation: fadeUp 0.8s forwards; }
+
+/* Hidden until hover */
+.fade-delay-1,
+.fade-delay-2,
+.fade-delay-3 {
+  opacity: 0;
+  animation-play-state: paused;
+}
+
+/* Trigger animation ONLY on hover */
+.group:hover .fade-delay-1,
+.group:hover .fade-delay-2,
+.group:hover .fade-delay-3 {
+  animation-play-state: running !important;
+}
+
+/* ----------------------------------------------------------
+   🧲 Magnetic Hover Effect
+---------------------------------------------------------- */
+.card-magnetic {
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
+}
+
+.card-magnetic:hover {
+  transform: perspective(800px) rotateX(6deg) rotateY(6deg) scale(1.03);
+}
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUpFade 0.6s ease-out forwards;
+}
