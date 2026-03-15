@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import PageHero from "../components/PageHero";
-import packagesData from "../data/packagesData";
 
 const Packages = () => {
+  const [packages, setPackages] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/tour-packages")
+      .then((res) => res.json())
+      .then((data) => setPackages(data))
+      .catch((err) => console.error("Failed to fetch packages:", err));
+  }, []);
+
   return (
     <>
       <PageHero
@@ -15,14 +24,13 @@ const Packages = () => {
         <div className="max-w-7xl mx-auto px-6">
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            {packagesData.map((pkg) => (
+            {packages.map((pkg) => (
               <div
                 key={pkg.id}
                 className="bg-white rounded-xl shadow hover:shadow-lg transition"
               >
                 <img
-                  src={pkg.image}
-                  alt={pkg.title}
+src={`http://localhost:8000/images/packages/${pkg.image}`}                  alt={pkg.title}
                   className="h-56 w-full object-cover rounded-t-xl"
                 />
 

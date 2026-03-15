@@ -6,6 +6,12 @@ use App\Models\BookingRequest;
 use App\Models\TourPackage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookingReceivedMail;
+use App\Mail\BookingApprovedMail;
+use App\Mail\BookingRejectedMail;
+use App\Mail\CustomAdminMail;
+
 
 class BookingRequestController extends Controller
 {
@@ -34,6 +40,8 @@ class BookingRequestController extends Controller
             ...$validator->validated(),
             'status' => 'pending'
         ]);
+
+        Mail::to($booking->customer_email)->send(new BookingReceivedMail($booking));
 
         return response()->json([
             'success' => true,
@@ -87,25 +95,51 @@ public function updateStatus(Request $request, $id)
 }
 public function approve($id)
 {
-    $booking = BookingRequest::findOrFail($id);
-    $booking->status = 'Approved';
+    $booking = BookingRequest::with('tourPackage')->findOrFail($id);
+
+    $booking->status = 'approved';
     $booking->save();
 
+    Mail::to($booking->customer_email)->send(new BookingApprovedMail($booking));
+
     return response()->json([
-        'message' => 'Booking approved successfully'
+        'success' => true,
+        'message' => 'Booking approved'
     ]);
 }
 
 public function reject($id)
 {
-    $booking = BookingRequest::findOrFail($id);
-    $booking->status = 'Rejected';
+    $booking = BookingRequest::with('tourPackage')->findOrFail($id);
+
+    $booking->status = 'rejected';
     $booking->save();
 
+    Mail::to($booking->customer_email)->send(new BookingRejectedMail($booking));
+
     return response()->json([
-        'message' => 'Booking rejected successfully'
+        'success' => true,
+        'message' => 'Booking rejected'
     ]);
 }
 
+public function sendEmail(Request $request, $id)
+{
+    $booking = BookingRequest::with('tourPackage')->find($id);
 
+    if (!$booking) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Booking not found'
+        ]);
+    }
+
+    Mail::to($booking->customer_email)
+        ->send(new CustomAdminMail($booking, $request->message));
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Email sent successfully'
+    ]);
+}
 }

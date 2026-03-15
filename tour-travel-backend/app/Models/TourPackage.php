@@ -11,11 +11,17 @@ class TourPackage extends Model
 
     protected $table = 'tour_packages';
 
-    protected $fillable = [
-        'title',
-        'location',
-        'duration_days',
-        'price',
-        'description',
-    ];
+  protected $fillable = [
+    'title',
+    'location',
+    'duration',
+    'price',
+    'image',
+    'popular',
+    'description',
+    'highlights',
+    'itinerary',
+    'includes',
+    'excludes'
+];
 }

@@ -23,8 +23,8 @@ class BookingRequest extends Model
     ];
 
     // Relationship: booking belongs to a tour package
-    public function tourPackage()
-    {
-        return $this->belongsTo(TourPackage::class);
-    }
+   public function tourPackage()
+{
+    return $this->belongsTo(TourPackage::class, 'tour_package_id');
+}
 }
